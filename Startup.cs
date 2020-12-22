@@ -25,12 +25,19 @@ namespace MyCourse
             {
                 app.UseDeveloperExceptionPage();
             }
+            //per usare i file in wwwroot
             app.UseStaticFiles();
             
             app.Run(async (context) =>
             {
                 string nome = context.Request.Query["nome"];
-                await context.Response.WriteAsync($"CIAO {nome}!");
+                if (nome==null)
+                {
+                    nome="SCONOSCIUTO";
+                }
+                //nome=nome.ToUpper();
+
+                await context.Response.WriteAsync($"CIAO {nome.ToUpper()}!");
             });
         }
     }
