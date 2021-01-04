@@ -11,13 +11,17 @@ namespace MyCourse.Controllers
         {
             var courseService = new CourseService();
             //var courseService = new CourseService();
-            List<CourseViewModel> courses = courseService.GetServices();
+            List<CourseViewModel> courses = courseService.GetCourses();
+            ViewData["Title"] = "Catalogo dei Corsi";
             return View(courses);
         }
-        public IActionResult Detail(string  id)
+        public IActionResult Detail(int id)
         {
             //return Content($"Sono detail, ho ricevuto l'id {id}");
-            return View();
+            var courseService = new CourseService();
+            CourseDetailViewModel viewModel = courseService.GetCourse(id);
+            ViewData["Title"] = viewModel.Title;
+            return View(viewModel);
         }
         public IActionResult Search(string  title)
         {
