@@ -37,6 +37,29 @@ namespace MyCourse.Models.Entities
                 entity.HasKey(course => course.Id); //Superfluo se la proprietà si chiama Id o CoursesId
                 //entity.HasKey(course => new {course.Id,course.Author}); // in caso di chiave composta da piu campi
 
+
+                //Mapping per Owned Type
+                //entity.OwnsOne(course => course.CurrentPrice);
+                //currentPrice_Amount
+                //CurrentPrice_Currency
+                //oppure 
+                entity.OwnsOne(course => course.CurrentPrice, builder => {
+                    builder.Property(money => money.Currency)
+                    .HasConversion<string>()
+                    .HasColumnName("CurrentPrice_Currency"); //Superfluo in quanto le colonne utilizzano già la naming convention
+                    builder.Property(money => money.Amount).HasColumnName("CurrentPrice_Amount"); //Superfluo in quanto le colonne utilizzano già la naming convention
+                });
+
+                entity.OwnsOne(course => course.FullPrice, builder => {
+                    builder.Property(money => money.Currency).HasConversion<string>();
+                });
+                //Mapping per le relazioni
+
+                entity.HasMany(course => course.Lessons)
+                    .WithOne(lesson => lesson.Course)
+                    .HasForeignKey(lesson => lesson.CourseId); //superflua se rispetta nome entità principale+Id
+
+
                 #region Mapping generato automaticamente dal tool di reverse di EF
                 /*
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -85,6 +108,11 @@ namespace MyCourse.Models.Entities
 
             modelBuilder.Entity<Lesson>(entity =>
             {
+                /*
+                entity.HasOne(lesson => lesson.Course)
+                .WithMany(course => course.Lessons);
+                */ // non importa in quanto è già referenziato su classe entity. lo tengo perchè comodo capire che si possono illustrare le relazioni sia da un lato che dall'altro
+
                 #region Mapping generato automaticamente dal tool di reverse di EF 
                 /*
                 entity.Property(e => e.Id).ValueGeneratedNever();
