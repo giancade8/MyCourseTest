@@ -19,6 +19,7 @@ namespace MyCourse.Models.Services.Application
         public async Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
             CourseDetailViewModel viewModel = await dbContext.Courses
+                .AsNoTracking()
                 .Where(course => course.Id == id)
                 .Select(course =>
                 new CourseDetailViewModel {
@@ -47,6 +48,7 @@ namespace MyCourse.Models.Services.Application
 
         public async Task<List<CourseViewModel>> GetCoursesAsync()
         {
+            /*
             List<CourseViewModel> courses = await dbContext.Courses.Select(course => 
             new CourseViewModel {
                 Id = course.Id,
@@ -58,6 +60,21 @@ namespace MyCourse.Models.Services.Application
                 FullPrice = course.FullPrice
             })
             .ToListAsync();
+            */
+            IQueryable<CourseViewModel> queryLinq = dbContext.Courses
+            .AsNoTracking()
+            .Select(course =>
+            new CourseViewModel {
+                Id = course.Id,
+                Title = course.Title,
+                ImagePath = course.ImagePath,
+                Author = course.Author,
+                Rating = course.Rating,
+                CurrentPrice = course.CurrentPrice,
+                FullPrice = course.FullPrice
+            });
+
+            List<CourseViewModel> courses = await queryLinq.ToListAsync();
 
             return courses;
         }
