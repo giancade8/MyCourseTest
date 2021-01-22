@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using MyCourse.Models.Options;
 using Microsoft.Extensions.Logging;
+using MyCourse.Models.Exceptions;
 
 namespace MyCourse.Models.Services.Application
 {
@@ -35,7 +36,8 @@ namespace MyCourse.Models.Services.Application
             var courseTable = dataSet.Tables[0];
             if (courseTable.Rows.Count != 1)
             {
-                throw new InvalidOperationException($"Did not return exactly 1 row for Course {id}");
+                logger.LogWarning("Course {id} not found",id);
+                throw new CourseNotFoundException(id);
             }
             var courseRow = courseTable.Rows[0];
             var courseDetailViewModel = CourseDetailViewModel.FromDataRow(courseRow);
