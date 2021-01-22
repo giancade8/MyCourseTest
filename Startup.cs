@@ -13,6 +13,7 @@ using MyCourse.Models.Services.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyCourse.Models.Options;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace MyCourse
 {
@@ -43,8 +44,9 @@ namespace MyCourse
             });
 
             //options
-            services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<CoursesOptions>(Configuration.GetSection("Courses"));
+            services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<MemoryCacheOptions>(Configuration.GetSection("MemoryCache"));
             
         }
 
