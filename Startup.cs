@@ -43,6 +43,19 @@ namespace MyCourse
                 optionsBuilder.UseSqlite(connectionString);
             });
 
+            #region Config servizio cache distribuita
+            // services.AddStackExchangeRedisCache(options =>
+            // {
+            //     Configuration.Bind("DistributedCache:Redis", options);
+            // });
+            // services.AddDistributedSqlServerCache(option =>
+            // {
+            //     Configuration.Bind("DistributedCache:SqlServer",option)
+            // }
+            // );
+            //services.AddDistributedMemoryCache();
+            #endregion
+
             //options
             services.Configure<CoursesOptions>(Configuration.GetSection("Courses"));
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
